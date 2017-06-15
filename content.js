@@ -12,10 +12,33 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     sendResponse({
       value: clickedEl.value
     });
-    console.log(clickedEl.innerHTML);
     highlight(clickedEl, 10, 20);
   }
 });
+
+function renderPara(clickedEl){
+  var text = clickedEl.innerHTML();
+  var pre = "";
+  var middle = "";
+  var post = text;
+  while(post){
+    middle += post[0];
+    if(post[0] === " " || post[0] == "\n"){
+      var emboldedText = emboldText(pre, middle, post);
+      clickedEl.innerHTML = emboldedText;
+      //sleep here
+      pre += middle;
+      middle = ""; 
+    }
+    post = post.substring(1);
+  }
+
+}
+
+function emboldText(pre, boldTxt, post){
+  var emboldedText = pre + "<span style='font-weight: bold'>" + post;
+  return emboldedText;
+}
 
 function highlight(inputText, start, end) {
   // inputText = document.getElementById("inputText")
