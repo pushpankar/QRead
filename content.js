@@ -38,11 +38,12 @@ async function renderPara(clickedEl){
     }
     post = post.substring(1);
   }
+  clickedEl.innerHTML = text;
 
 }
 
 function emboldText(pre, boldTxt, post){
-  var emboldedText = pre + "<span style='font-weight: bold'>" + boldTxt +"</span>" + post;
+  var emboldedText = "<span style='color: #D3D3D3'>" + pre +"</span>" + "<span style='color: #000000'>" + boldTxt +"</span>" + "<span style='color: #D3D3D3'>" + post +"</span>";
   return emboldedText;
 }
 
