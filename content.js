@@ -12,21 +12,27 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     sendResponse({
       value: clickedEl.value
     });
-    highlight(clickedEl, 10, 20);
+    console.log("Now Rendering");
+    renderPara(clickedEl);
   }
 });
 
-function renderPara(clickedEl){
-  var text = clickedEl.innerHTML();
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function renderPara(clickedEl){
+  var text = clickedEl.innerHTML;
   var pre = "";
   var middle = "";
   var post = text;
   while(post){
     middle += post[0];
-    if(post[0] === " " || post[0] == "\n"){
+    if(post[0] === " " || post[0] == "\n" || post.length == 1){
       var emboldedText = emboldText(pre, middle, post);
       clickedEl.innerHTML = emboldedText;
       //sleep here
+      await sleep(200);
       pre += middle;
       middle = ""; 
     }
@@ -36,7 +42,7 @@ function renderPara(clickedEl){
 }
 
 function emboldText(pre, boldTxt, post){
-  var emboldedText = pre + "<span style='font-weight: bold'>" + post;
+  var emboldedText = pre + "<span style='font-weight: bold'>" + boldTxt +"</span>" + post;
   return emboldedText;
 }
 
