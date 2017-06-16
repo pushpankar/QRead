@@ -22,8 +22,8 @@ function sleep(ms) {
 }
 
 async function renderPara(clickedEl){
-  var span = 10;
-  var defaultTime = 150;
+  var span = 8;
+  var defaultTime = 200;
   var originalText = clickedEl.innerHTML;
   var text = getFormattedText(clickedEl);
   var pre = "";
@@ -31,18 +31,15 @@ async function renderPara(clickedEl){
   var post = text;
   while(post){
     middle += post[0];
-    if(post.length === 1 || post[0] == ',' || (post[0] === " "  && middle.length > span) || post[0] === "\n" || post[0] === "."){
+    if(post.length === 1 || pauseTime[post[0]] || (post[0] === " "  && middle.length > span)){
     // if((post[0] === " " || post[0] == "\n" || post.length == 1) && ()){
       var emboldedText = emboldText(pre, middle, post);
       clickedEl.innerHTML = emboldedText;
       //sleep here
       var waitTime = defaultTime + middle.length * 5;
-      if(post[0] === "\n" || post[0] === "."){
-        waitTime += 300;
-      }else if(post[0] == ','){
-        waitTime += 100;
+      if(pauseTime[post[0]]){
+        waitTime += pauseTime[post[0]];
       }
-      
       await sleep(waitTime);
       pre += middle;
       middle = ""; 
@@ -77,13 +74,3 @@ function emboldText(pre, boldTxt, post){
   var emboldedText = "<span style='color: #D3D3D3'>" + pre +"</span>" + "<span style='color: #000000'>" + boldTxt +"</span>" + "<span style='color: #D3D3D3'>" + post +"</span>";
   return emboldedText;
 }
-
-// function highlight(inputText, start, end) {
-//   // inputText = document.getElementById("inputText")
-//   var innerHTML = inputText.innerHTML;
-//   // var index = innerHTML.indexOf(text);
-//   innerHTML = innerHTML.substring(0, start) + "<span style='font-weight: bold '>" + innerHTML.substring(start, end) + "</span>" + innerHTML.substring(end);
-//   inputText.innerHTML = innerHTML;
-//   console.log(innerHTML);
-//   return innerHTML;
-// };

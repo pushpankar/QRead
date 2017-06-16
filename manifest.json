@@ -6,7 +6,7 @@
     "matches": [
       "<all_urls>"
     ],
-    "js": ["content.js"]
+    "js": ["pauseTime.js","content.js"]
   }],
   "background": {
     "scripts": ["background.js"]
