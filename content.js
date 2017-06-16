@@ -21,15 +21,34 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function removeHTML(htmlText){
+  var text = "";
+  for(var i = 0; i < htmlText.length; i++){
+    if(htmlText[i] === "<"){
+      while(htmlText[i] !== ">")
+        i++;
+      i++;
+    }
+    text += htmlText[i];
+  }
+  return text;
+}
+
 async function renderPara(clickedEl){
   var span = 8;
   var defaultTime = 200;
   var originalText = clickedEl.innerHTML;
   var text = getFormattedText(clickedEl);
+  console.log(text);
   var pre = "";
   var middle = "";
   var post = text;
   while(post){
+    if(post[0] === "<"){
+      while(post[0] !== ">")
+        post = post.substring(1);
+      post = post.substring(1);
+    }
     middle += post[0];
     if(post.length === 1 || pauseTime[post[0]] || (post[0] === " "  && middle.length > span)){
     // if((post[0] === " " || post[0] == "\n" || post.length == 1) && ()){
@@ -53,7 +72,7 @@ async function renderPara(clickedEl){
 function getFormattedText(para){
   // https://stackoverflow.com/questions/3738490/finding-line-wraps
   var current = para;
-  var text = current.innerHTML;
+  var text = removeHTML(current.innerHTML);
   var words = text.split(' ');
   current.innerHTML = words[0];
   var height = current.offsetHeight;
