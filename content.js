@@ -24,20 +24,23 @@ function sleep(ms) {
 async function renderPara(clickedEl){
   var span = 10;
   var defaultTime = 150;
-  var text = clickedEl.innerHTML;
+  var originalText = clickedEl.innerHTML;
+  var text = getFormattedText(clickedEl);
   var pre = "";
   var middle = "";
   var post = text;
   while(post){
     middle += post[0];
-    if(post.length === 1 || (post[0] === " "  && middle.length > span) || post[0] === "\n" || post[0] === "."){
+    if(post.length === 1 || post[0] == ',' || (post[0] === " "  && middle.length > span) || post[0] === "\n" || post[0] === "."){
     // if((post[0] === " " || post[0] == "\n" || post.length == 1) && ()){
       var emboldedText = emboldText(pre, middle, post);
       clickedEl.innerHTML = emboldedText;
       //sleep here
       var waitTime = defaultTime + middle.length * 5;
       if(post[0] === "\n" || post[0] === "."){
-        waitTime += 1000;
+        waitTime += 300;
+      }else if(post[0] == ','){
+        waitTime += 100;
       }
       
       await sleep(waitTime);
@@ -46,8 +49,28 @@ async function renderPara(clickedEl){
     }
     post = post.substring(1);
   }
-  clickedEl.innerHTML = text;
+  clickedEl.innerHTML = originalText;
 
+}
+
+function getFormattedText(para){
+  // https://stackoverflow.com/questions/3738490/finding-line-wraps
+  var current = para;
+  var text = current.innerHTML;
+  var words = text.split(' ');
+  current.innerHTML = words[0];
+  var height = current.offsetHeight;
+  var finalText = words[0];
+  for(var i = 1; i < words.length; i++){
+    current.innerHTML = current.innerHTML + ' ' + words[i];
+    if(current.offsetHeight > height){
+      finalText += "\n" + words[i];
+        height = current.offsetHeight;
+    }else{
+      finalText += ' ' + words[i];
+    }
+  }
+  return finalText;
 }
 
 function emboldText(pre, boldTxt, post){
@@ -55,12 +78,12 @@ function emboldText(pre, boldTxt, post){
   return emboldedText;
 }
 
-function highlight(inputText, start, end) {
-  // inputText = document.getElementById("inputText")
-  var innerHTML = inputText.innerHTML;
-  // var index = innerHTML.indexOf(text);
-  innerHTML = innerHTML.substring(0, start) + "<span style='font-weight: bold '>" + innerHTML.substring(start, end) + "</span>" + innerHTML.substring(end);
-  inputText.innerHTML = innerHTML;
-  console.log(innerHTML);
-  return innerHTML;
-};
+// function highlight(inputText, start, end) {
+//   // inputText = document.getElementById("inputText")
+//   var innerHTML = inputText.innerHTML;
+//   // var index = innerHTML.indexOf(text);
+//   innerHTML = innerHTML.substring(0, start) + "<span style='font-weight: bold '>" + innerHTML.substring(start, end) + "</span>" + innerHTML.substring(end);
+//   inputText.innerHTML = innerHTML;
+//   console.log(innerHTML);
+//   return innerHTML;
+// };
