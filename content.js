@@ -36,7 +36,7 @@ function removeHTML(htmlText){
 
 async function renderPara(clickedEl){
   var span = 8;
-  var defaultTime = 200;
+  var defaultTime = 150;
   var originalText = clickedEl.innerHTML;
   var text = getFormattedText(clickedEl);
   console.log(text);
@@ -49,13 +49,19 @@ async function renderPara(clickedEl){
         post = post.substring(1);
       post = post.substring(1);
     }
+    if(post[0] >= '0' && post[0] <= "9"){
+      while(post[0] !== " "){
+        middle += post[0];
+        post = post.substring(1);
+      }
+    }
     middle += post[0];
     if(post.length === 1 || pauseTime[post[0]] || (post[0] === " "  && middle.length > span)){
     // if((post[0] === " " || post[0] == "\n" || post.length == 1) && ()){
       var emboldedText = emboldText(pre, middle, post);
       clickedEl.innerHTML = emboldedText;
       //sleep here
-      var waitTime = defaultTime + middle.length * 5;
+      var waitTime = defaultTime + middle.length * 20;
       if(pauseTime[post[0]]){
         waitTime += pauseTime[post[0]];
       }
