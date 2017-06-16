@@ -27,7 +27,7 @@ function removeHTML(htmlText){
     if(htmlText[i] === "<"){
       while(htmlText[i] !== ">")
         i++;
-      i++;
+      continue;
     }
     text += htmlText[i];
   }
