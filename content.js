@@ -22,17 +22,25 @@ function sleep(ms) {
 }
 
 async function renderPara(clickedEl){
+  var span = 10;
+  var defaultTime = 150;
   var text = clickedEl.innerHTML;
   var pre = "";
   var middle = "";
   var post = text;
   while(post){
     middle += post[0];
-    if(post[0] === " " || post[0] == "\n" || post.length == 1){
+    if(post.length === 1 || (post[0] === " "  && middle.length > span) || post[0] === "\n" || post[0] === "."){
+    // if((post[0] === " " || post[0] == "\n" || post.length == 1) && ()){
       var emboldedText = emboldText(pre, middle, post);
       clickedEl.innerHTML = emboldedText;
       //sleep here
-      await sleep(200);
+      var waitTime = defaultTime + middle.length * 5;
+      if(post[0] === "\n" || post[0] === "."){
+        waitTime += 1000;
+      }
+      
+      await sleep(waitTime);
       pre += middle;
       middle = ""; 
     }
