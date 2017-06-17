@@ -2,13 +2,13 @@ var clickedEl = null;
 
 document.addEventListener("mousedown", function(event) {
   //right click
-  if (event.button == 2) {
+  if (event.button === 2) {
     clickedEl = event.target;
   }
 }, true);
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request == "getClickedEl") {
+  if (request === "getClickedEl") {
     sendResponse({
       value: clickedEl.value
     });
@@ -50,13 +50,15 @@ async function renderPara(clickedEl){
       post = post.substring(1);
     }
     if(post[0] >= '0' && post[0] <= "9"){
-      while(post[0] !== " "){
+      while(post && post[0] !== " "){
         middle += post[0];
         post = post.substring(1);
       }
     }
-    middle += post[0];
-    if(post.length === 1 || pauseTime[post[0]] || (post[0] === " "  && middle.length > span)){
+    if(post)
+      middle += post[0];
+    console.log(post);
+    if(post.length <= 1 || pauseTime[post[0]] || (post[0] === " "  && middle.length > span)){
       var emboldedText = emboldText(pre, middle, post.substring(1));
       clickedEl.innerHTML = emboldedText;
       //sleep here
