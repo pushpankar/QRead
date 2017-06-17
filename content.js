@@ -57,8 +57,7 @@ async function renderPara(clickedEl){
     }
     middle += post[0];
     if(post.length === 1 || pauseTime[post[0]] || (post[0] === " "  && middle.length > span)){
-    // if((post[0] === " " || post[0] == "\n" || post.length == 1) && ()){
-      var emboldedText = emboldText(pre, middle, post);
+      var emboldedText = emboldText(pre, middle, post.substring(1));
       clickedEl.innerHTML = emboldedText;
       //sleep here
       var waitTime = defaultTime + middle.length * 20;
