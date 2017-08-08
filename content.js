@@ -34,30 +34,52 @@ function removeHTML(htmlText){
   return text;
 }
 
+/**
+ * This function takes the clicked HTML object
+ * And renders text according to configuration
+**/
 async function renderPara(clickedEl){
+  if(!clickedEl){
+      return;
+  }
+  // 
   var span = 8;
+  // min time to stop on a word. Will add time to this based on word
   var defaultTime = 150;
+  // get the text and clean it
   var originalText = clickedEl.innerHTML;
   var text = getFormattedText(clickedEl);
   console.log(text);
+
+  // pre is the words that has been rendered
+  // middle is the word that will be renedered now
+  // post is the word that will be rendered in future
   var pre = "";
   var middle = "";
   var post = text;
+
+  // iterate till there is no word left to iterate
   while(post){
+    // remove html elements
     if(post[0] === "<"){
       while(post[0] !== ">")
         post = post.substring(1);
       post = post.substring(1);
     }
+
+    // render numbers in one go
     if(post[0] >= '0' && post[0] <= "9"){
       while(post && post[0] !== " "){
         middle += post[0];
         post = post.substring(1);
       }
     }
+
     if(post)
       middle += post[0];
     console.log(post);
+
+    // its time to display new text
     if(post.length <= 1 || pauseTime[post[0]] || (post[0] === " "  && middle.length > span)){
       var emboldedText = emboldText(pre, middle, post.substring(1));
       clickedEl.innerHTML = emboldedText;
@@ -72,7 +94,9 @@ async function renderPara(clickedEl){
     }
     post = post.substring(1);
   }
+  // make the page as it was before
   clickedEl.innerHTML = originalText;
+  return renderPara(clickedEl.nextElementSibling);
 
 }
 
