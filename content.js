@@ -43,7 +43,7 @@ async function renderPara(clickedEl){
       return;
   }
   // 
-  var span = 8;
+  var span = 11;
   // min time to stop on a word. Will add time to this based on word
   var defaultTime = 150;
   // get the text and clean it
@@ -77,7 +77,7 @@ async function renderPara(clickedEl){
 
     if(post)
       middle += post[0];
-    console.log(post);
+    // console.log(post);
 
     // its time to display new text
     if(post.length <= 1 || pauseTime[post[0]] || (post[0] === " "  && middle.length > span)){
@@ -96,7 +96,14 @@ async function renderPara(clickedEl){
   }
   // make the page as it was before
   clickedEl.innerHTML = originalText;
-  return renderPara(clickedEl.nextElementSibling);
+  currentEl = clickedEl.nextElementSibling;
+  console.log(currentEl.nodeName);
+  console.log(clickedEl.nodeName);
+  while(currentEl.nodeName !== clickedEl.nodeName){
+      currentEl = currentEl.nextElementSibling;
+      console.log(clickedEl.nodeName);
+  }
+  return renderPara(currentEl);
 
 }
 
